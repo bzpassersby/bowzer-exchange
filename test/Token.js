@@ -6,7 +6,7 @@ const tokens=(n)=>{
 
 describe('Token',()=>{
 	//Tests go inside here
-let token,accounts,deployer, receiver
+let token,accounts,deployer, receiver, spender
 
 
 
@@ -17,6 +17,7 @@ beforeEach(async ()=>{
     accounts = await ethers.getSigners()
     deployer= accounts[0]
     receiver= accounts[1]
+    spender= accounts[2]
 
 
 })
@@ -93,13 +94,49 @@ describe("Failure",()=>{
         amount=tokens(10)
         await expect(token.connect(deployer).transfer('0x0000000000000000000000000000000000000000',amount)).to.be.reverted
     })
+
 })
         
+    })
+})
+
+describe('Token Approvals', ()=>{
+
+    describe('Success',()=>{
+    
+    beforeEach( async ()=>{
+        amount=tokens(100)
+        transaction = await token.connect(deployer).approve(spender.address,amount)
+        result= await transaction.wait()
+    })
+
+
+    it('allowcates allowance to spender', async()=>{
+        expect(await token.allowance(deployer.address,spender.address)).to.equal(amount)
+    })
+
+    it('emits an approval event', async()=>{
+        let event=result.events[0]
+        expect(event.event).to.equal('Approval')
+        let args=event.args
+        expect(args.owner).to.equal(deployer.address)
+        expect(args.spender).to.equal(spender.address)
+        expect(args.value).to.equal(amount)
+
+    })
+
+    })
+
+    describe('Failure',()=>{
+        it('rejects approving invalid address', async()=>{
+        amount=tokens(100)
+        await expect(token.connect(deployer).approve('0x0000000000000000000000000000000000000000',amount)).to.be.reverted
+        })
     })
 
 
 
-    
+
 })
 })
 
