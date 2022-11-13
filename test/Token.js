@@ -135,17 +135,49 @@ describe('Token Approvals', ()=>{
     })
 
 describe('Transfer Deleggation',()=>{
+    let amount, transaction, result
+
+    beforeEach( async ()=>{
+        amount= tokens(100)
+        transaction=await token.connect(deployer).approve(spender.address, amount)
+        result= await transaction.wait()
+    })
      describe('Success', ()=>{
         beforeEach( async ()=>{
-            amount=tokens(100)
-            transaction=await token.connect(spender).transferFrom(spender.address, receiver.address, amount)
-            result= await transcation.wait()
+            transaction=await token.connect(spender).transferFrom(deployer.address,receiver.address,amount)
+            result=await transaction.wait()
         })
     
-        it('transfer tokens and adjust allowance', async ()=>{
-            expect(balanceOf(spender.address)).to.equal('0')
-            
+        it('transfer tokens', async ()=>{
+            expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900))
+            expect(await token.balanceOf(receiver.address)).to.equal(amount)
+
         })
+
+        it('resets allowance', async ()=>{
+            expect(await token.allowance(deployer.address,spender.address)).to.equal(0)
+        })
+
+        it('Emits a transfer event', async ()=>{
+        let event=result.events[0]
+        console.log(event)
+        expect(event.event).to.equal('Transfer')
+        let args=event.args
+        expect(args.to).to.equal(receiver.address)
+        expect(args.from).to.equal(deployer.address)
+        expect(args.value).to.equal(amount)
+        
+    })
+
+     })
+
+     describe('Failure', ()=>{
+        //Attempts to transfer too mnany tokens
+        it('rejects if attempted to transfer too many tokens', async()=>{
+        const invalidAmount = tokens(100000000)
+        await expect(token.connect(spender).transferFrom(deployer.address, receiver.address, invalidAmount)).to.be.reverted
+        })
+   
 
      })
 

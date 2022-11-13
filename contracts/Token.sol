@@ -75,6 +75,21 @@ function approve(address _spender, uint256 _value)
       return true;
 }
 
+function transferFrom(address _from, address _to, uint256 _value)
+public
+returns (bool success)
+{
+   require(allowance[_from][msg.sender] >= _value);
+   require(balanceOf[_from]>=_value);
+   require(_to != address(0));
+
+   _transfer(_from,_to,_value);
+
+   allowance[_from][msg.sender]= allowance[_from][msg.sender] - _value;
+
+  emit Transfer(_from, _to, _value);
+}
+
 
 }
 
