@@ -134,7 +134,24 @@ describe('Token Approvals', ()=>{
         })
     })
 
+describe('Transfer Deleggation',()=>{
+     describe('Success', ()=>{
+        beforeEach( async ()=>{
+            amount=tokens(100)
+            transaction=await token.connect(spender).transferFrom(spender.address, receiver.address, amount)
+            result= await transcation.wait()
+        })
+    
+        it('transfer tokens and adjust allowance', async ()=>{
+            expect(balanceOf(spender.address)).to.equal('0')
+            
+        })
 
+     })
+
+
+
+})
 
 
 })

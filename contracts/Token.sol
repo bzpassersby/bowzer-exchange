@@ -47,16 +47,21 @@ event Approval(
       require(_to != address(0),"invalid receiver address");
 
 
-      // Deduct tokens from spender
-      balanceOf[msg.sender]=balanceOf[msg.sender] - _value;
-      // Credit tokens to receiver
-      balanceOf[_to]=balanceOf[_to]+ _value;
+      _transfer(msg.sender, _to, _value);
 
       //Emit Event
       emit Transfer(msg.sender, _to, _value);
 
       return true;
    }
+
+function _transfer(address _from, address _to, uint256 _value)
+      internal
+      returns (bool success){
+         balanceOf[_from]=balanceOf[_from]- _value;
+         balanceOf[_to]=balanceOf[_to]+ _value;
+         return true;
+      }
 
 function approve(address _spender, uint256 _value) 
          public
@@ -69,6 +74,7 @@ function approve(address _spender, uint256 _value)
 
       return true;
 }
+
 
 }
 
