@@ -69,6 +69,8 @@ function approve(address _spender, uint256 _value)
 {      require(_spender !=address(0));
 
        allowance[msg.sender][_spender]=_value;
+
+       console.log(_value);
    
        emit Approval(msg.sender,_spender, _value);
 
@@ -79,8 +81,9 @@ function transferFrom(address _from, address _to, uint256 _value)
 public
 returns (bool success)
 {
-   require(allowance[_from][msg.sender] >= _value);
-   require(balanceOf[_from]>=_value);
+   console.log(_from,_to,_value);
+   require(allowance[_from][msg.sender] >= _value, 'insufficient allowance');
+   require(balanceOf[_from]>=_value,'insufficient balance');
    require(_to != address(0));
 
    _transfer(_from,_to,_value);
@@ -88,6 +91,8 @@ returns (bool success)
    allowance[_from][msg.sender]= allowance[_from][msg.sender] - _value;
 
   emit Transfer(_from, _to, _value);
+
+  return true;
 }
 
 

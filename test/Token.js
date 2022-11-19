@@ -75,7 +75,7 @@ describe("Success",()=>{
       })
     it('Emits a transfer event', async ()=>{
         let event=result.events[0]
-        console.log(event)
+        //console.log(event)
         expect(event.event).to.equal('Transfer')
         let args=event.args
         expect(args.to).to.equal(receiver.address)
