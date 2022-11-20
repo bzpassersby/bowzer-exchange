@@ -42,7 +42,7 @@ event Approval(
       returns (bool success) 
    {
       //Require that sender has sufficient funds
-      require(balanceOf[msg.sender]>_value);
+      require(balanceOf[msg.sender]>= _value, 'insufficient balance');
       //Require receiver has a valid address
       require(_to != address(0),"invalid receiver address");
 
