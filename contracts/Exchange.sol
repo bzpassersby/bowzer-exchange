@@ -19,7 +19,16 @@ contract Exchange {
       address tokenGive; // Address of the token they give
       uint256 amountGive; //Amount they give
       uint256 timestamp; //When order was created
-   };
+   }
+   event Order(
+      uint256 id,
+      address user,
+      address tokenGet,
+      uint256 amountGet,
+      address tokenGive,
+      uint256 amountGive,
+      uint256 timestamp
+      );
    mapping(uint256 => _Order) public orders;
    uint256 public orderCount; 
 
@@ -78,15 +87,11 @@ returns (uint256)
 function makeOrder(address _tokenGet, uint256 _amountGet, address _tokenGive, uint256 _amountGive)
 public{
 
-   //    uint256 id; //Unique identifier for order
-   //    address user; // User who made order
-   //    address tokenGet; //Address of the token they receive
-   //    uint256 amountGet; // Amount they receive
-   //    address tokenGive; // Address of the token they give
-   //    uint256 amountGive; //Amount they give
-   //    uint256 timestamp; //When order was created
+//Require token balance & Prevent orders if tokens aren't an exchang
+require(balanceOf(_tokenGive,msg.sender)>= _amountGive);
 
 
+//Create Order
 orderCount=orderCount+1;
 
 orders[orderCount]=_Order(
@@ -97,8 +102,8 @@ orders[orderCount]=_Order(
    _tokenGive,
    _amountGive,
    block.timestamp);
-
-
+//Emit Event
+emit Order(orderCount,msg.sender,_tokenGet,_amountGet,_tokenGive,_amountGive,block.timestamp);
 }
 
 
