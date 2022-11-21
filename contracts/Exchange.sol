@@ -10,6 +10,18 @@ contract Exchange {
    mapping (address => mapping (address => uint256)) public tokens;
    event Deposit(address token, address user, uint256 amount, uint256 balance);
    event Withdraw(address token, address user, uint256 amount, uint256 balance);
+   struct _Order {
+      // Attributes of an order
+      uint256 id; //Unique identifier for order
+      address user; // User who made order
+      address tokenGet; //Address of the token they receive
+      uint256 amountGet; // Amount they receive
+      address tokenGive; // Address of the token they give
+      uint256 amountGive; //Amount they give
+      uint256 timestamp; //When order was created
+   };
+   mapping(uint256 => _Order) public orders;
+   uint256 public orderCount; 
 
    constructor(address _feeAccount, uint256 _feePercent) {
       feeAccount= _feeAccount;
@@ -18,7 +30,7 @@ contract Exchange {
 
 
 
-//---------------
+//-------------------------
 // DEPOSIT & WITHDRAW TOKEN
 function depositToken(address _token, uint256 _value)
 public
@@ -58,7 +70,37 @@ view
 returns (uint256)
 {
   return tokens[_token][_user];
+}
+
+
+//----------------------
+// MAKE & CANCEL ORDERS
+function makeOrder(address _tokenGet, uint256 _amountGet, address _tokenGive, uint256 _amountGive)
+public{
+
+   //    uint256 id; //Unique identifier for order
+   //    address user; // User who made order
+   //    address tokenGet; //Address of the token they receive
+   //    uint256 amountGet; // Amount they receive
+   //    address tokenGive; // Address of the token they give
+   //    uint256 amountGive; //Amount they give
+   //    uint256 timestamp; //When order was created
+
+
+orderCount=orderCount+1;
+
+orders[orderCount]=_Order(
+   orderCount,
+   msg.sender,
+   _tokenGet,
+   _amountGet,
+   _tokenGive,
+   _amountGive,
+   block.timestamp);
+
 
 }
+
+
 
 }

@@ -24,6 +24,9 @@ beforeEach(async ()=>{
     const Token1 =await ethers.getContractFactory('Token')
     token1= await Token1.deploy('Bowzer Coin','BOWZER','1000000')
 
+    const Token2 =await.ethers.getContractFactory('Token')
+    token2= await Token2.deploy('Mock Dai','mDai','1000000')
+
 
 
 })
@@ -168,6 +171,43 @@ describe('Checking Balances',()=>{
     it('returns the balance', async ()=>{
        expect(await exchange.balanceOf(token1.address, user1.address)).to.equal(amount)
     })
+})
+
+describe('Making orders',()=>{
+    let transaction, result
+    let amount=tokens(1)
+
+describe('Success',()=>{
+    beforeEach(async ()=>{
+    //Deposit tokens before making order
+
+
+    // Approve Token
+    transaction=await token1.connect(user1).approve(exchange.address, amount)
+    result=await transaction.wait()
+
+    transaction=await token1.connect(deployer).transfer(user1.address, amount)
+    result=await transaction.wait()
+
+    // Deposit Token
+    transaction= await exchange.connect(user1).depositToken(token1.address, amount)
+    result=await transaction.wait()
+
+
+    // Make Order
+    transaction= await exchange.connect(user1).makeOrder(token2.address, amount, token1.address, amount)
+
+    })
+
+    it('tracks the newly created order', async ()=>{
+
+    })
+})
+
+describe('Failure',()=>{
+
+})
+    
 })
 
 
