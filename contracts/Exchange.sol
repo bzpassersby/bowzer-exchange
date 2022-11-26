@@ -31,6 +31,16 @@ contract Exchange {
       );
    mapping(uint256 => _Order) public orders;
    uint256 public orderCount; 
+   mapping(uint256 =>bool) public orderCancelled;
+   event Cancel(
+      uint256 id,
+      address user,
+      address tokenGet,
+      uint256 amountGet,
+      address tokenGive,
+      uint256 amountGive,
+      uint256 timestamp
+      );
 
    constructor(address _feeAccount, uint256 _feePercent) {
       feeAccount= _feeAccount;
@@ -106,6 +116,26 @@ orders[orderCount]=_Order(
 emit Order(orderCount,msg.sender,_tokenGet,_amountGet,_tokenGive,_amountGive,block.timestamp);
 }
 
+function cancelOrder(uint256 _id) public{
+   //Fetch order
+_Order storage _order= orders[_id];
+// require order exists
+require(_order.id == _id);
+// require authorized users;
+require(_order.user== msg.sender);
+   //Cancel the order
+orderCancelled[_id]=true;
+   //Emit event
+emit Cancel(
+   _order.id,
+   msg.sender,
+   _order.tokenGet,
+   _order.amountGet,
+   _order.tokenGive,
+   _order.amountGive,
+   block.timestamp
+   );
+}
 
 
 }
