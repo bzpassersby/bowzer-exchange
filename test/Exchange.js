@@ -6,7 +6,7 @@ const tokens=(n)=>{
 
 describe('Exchange',()=>{
 	
-let exchange,deployer,feeAcount, amount
+let exchange,deployer,feeAccount, amount
 const feePercent = 10
 
 beforeEach(async ()=>{
@@ -247,6 +247,14 @@ describe('Order actions', ()=>{
     transaction= await exchange.connect(user1).makeOrder(token2.address,tokens(1),token1.address,tokens(1))
     result=await transaction.wait()
 
+    transaction=await token2.connect(deployer).transfer(user2.address,tokens(100))
+    result=await transaction.wait()
+
+    transaction=await token2.connect(user2).approve(exchange.address,tokens(2))
+    result=await transaction.wait()
+
+    transaction=await exchange.connect(user2).depositToken(token2.address, tokens(2))
+
     })
 
     describe('Cancelling orders', ()=>{
@@ -284,8 +292,66 @@ describe('Order actions', ()=>{
                 await expect(exchange.connect(user2).cancelOrder(1)).to.be.reverted
             })
         }) 
+})
 
-})   
+    describe('Filling Orders',()=>{
+      describe("Success",()=>{
+
+      beforeEach(async ()=>{
+            transaction=await exchange.connect(user2).fillOrder('1')
+            result=await transaction.wait()
+        })
+        it('Executes the trade and charges fees', async()=>{
+            // Tokens Get
+            expect(await exchange.balanceOf(token2.address,user2.address)).to.equal(tokens(0.9))
+            expect(await exchange.balanceOf(token2.address,user1.address)).to.equal(tokens(1))
+            expect(await exchange.balanceOf(token2.address,feeAccount.address)).to.equal(tokens(0.1))
+            // Tokens Give
+            expect(await exchange.balanceOf(token1.address,user2.address)).to.equal(tokens(1))
+            expect(await exchange.balanceOf(token1.address,user1.address)).to.equal(tokens(0))
+            expect(await exchange.balanceOf(token1.address,feeAccount.address)).to.equal(tokens(0))
+        })
+        it('updates filled orders', async()=>{
+            expect(await exchange.orderFilled(1)).to.equal(true)
+        })
+
+        it ('emits a Trade event', async ()=>{
+    const event=result.events[0]
+    expect(event.event).to.equal('Trade')
+
+    const args=event.args
+    expect(args.id).to.equal('1')
+    expect(args.user).to.equal(user2.address)
+    expect(args.tokenGet).to.equal(token2.address)
+    expect(args.amountGet).to.equal(amount)
+    expect(args.tokenGive).to.equal(token1.address)
+    expect(args.amountGive).to.equal(amount)
+    expect(args.creater).to.equal(user1.address)
+    expect(args.timestamp).to.at.least(1)
+})            
+})
+      describe("Failure",()=>{
+
+        it('rejects invalid order id', async()=>{
+            const invalidOrderId=9999
+            await expect(exchange.connect(user2).fillOrder(invalidOrderId)).to.be.reverted
+        })
+
+        it('rejects filled order to be rejected', async()=>{
+            transaction=await exchange.connect(user2).fillOrder(1)
+            await transaction.wait()
+            await expect(exchange.connect(user2).fillOrder(1)).to.be.reverted
+        })
+        it('rejects cancelled order to be rejected', async()=>{
+            transaction=await exchange.connect(user1).cancelOrder(1)
+            await transaction.wait()
+            await expect(exchange.connect(user2).fillOrder(1)).to.be.reverted
+
+        })
+      })
+  
+
+    })   
 })
 })
 
