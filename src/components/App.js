@@ -6,24 +6,32 @@ import {useDispatch} from 'react-redux'
 import {loadProvider,
         loadNetwork,
         loadAccount,
-        loadToken
+        loadTokens,
+        loadExchange
       } from'../store/interactions'
 
 function App() {
   const dispatch = useDispatch()
 
   const loadBlockchainData = async ()=>{
-  // Connect Account
-  const account= await loadAccount(dispatch)
-  
+
   // Connect Ethers to blockchain
   const provider= await loadProvider(dispatch)
+
+  // Fetch current chainID (eg: hardhat 31337, kovan 42)
   const chainId=await loadNetwork(provider, dispatch)
 
-  // Token Smart Contract
+  // Fetch current account and balance from Metamask
+  await loadAccount(provider,dispatch)
+  
+  // Load Token Smart Contract
+  const BOWZER=config[chainId].bowzer
+  const mETH=config[chainId].mETH
+  await loadTokens(provider, [BOWZER.address,mETH.address], dispatch)
 
-  await loadToken(provider, config[chainId].bowzer.address, dispatch)
-
+  //Load Exchange Smart Contract
+  const exchangeConfig=config[chainId].exchange
+  await loadExchange(provider, exchangeConfig.address,dispatch)
 
 }
 
