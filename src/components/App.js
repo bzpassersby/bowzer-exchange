@@ -10,6 +10,10 @@ import {loadProvider,
         loadExchange
       } from'../store/interactions'
 
+import Navbar from'./Navbar'
+
+
+
 function App() {
   const dispatch = useDispatch()
 
@@ -21,8 +25,15 @@ function App() {
   // Fetch current chainID (eg: hardhat 31337, kovan 42)
   const chainId=await loadNetwork(provider, dispatch)
 
-  // Fetch current account and balance from Metamask
-  await loadAccount(provider,dispatch)
+  // Fetch current account and balance from Metamask when account changed
+  window.ethereum.on('accountsChanged',()=>{
+  loadAccount(provider,dispatch)
+  })
+
+  window.ethereum.on('chainChanged',()=>{
+    window.location.reload()
+  })
+
   
   // Load Token Smart Contract
   const BOWZER=config[chainId].bowzer
@@ -42,8 +53,8 @@ useEffect(()=>{
 
   return (
     <div>
-  {/* Navbar */}
-
+ 
+      <Navbar/>
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
