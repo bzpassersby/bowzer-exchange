@@ -7,11 +7,13 @@ import {loadProvider,
         loadNetwork,
         loadAccount,
         loadTokens,
-        loadExchange
+        loadExchange,
+        subscribeToEvents
       } from'../store/interactions'
 
 import Navbar from'./Navbar'
 import Markets from'./Markets'
+import Balance from'./Balance'
 
 
 
@@ -25,6 +27,7 @@ function App() {
 
   // Fetch current chainID (eg: hardhat 31337, kovan 42)
   const chainId=await loadNetwork(provider, dispatch)
+
 
   // Fetch current account and balance from Metamask when account changed
   window.ethereum.on('accountsChanged',()=>{
@@ -41,9 +44,13 @@ function App() {
   const mETH=config[chainId].mETH
   await loadTokens(provider, [BOWZER.address,mETH.address], dispatch)
 
+
   //Load Exchange Smart Contract
   const exchangeConfig=config[chainId].exchange
-  await loadExchange(provider, exchangeConfig.address,dispatch)
+  const exchange = await loadExchange(provider, exchangeConfig.address,dispatch)
+
+  //Listen to events
+  subscribeToEvents(exchange,dispatch)
 
 }
 
@@ -61,7 +68,7 @@ useEffect(()=>{
 
           <Markets/>
 
-          {/* Balance */}
+          <Balance/>
 
           {/* Order */}
 

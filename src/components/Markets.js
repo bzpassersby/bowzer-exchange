@@ -16,7 +16,7 @@ const marketHandler= async(e)=>{
 
 
 
-return(
+return( 
     <div className='component exchange__markets'>
       <div className='component__header'>
       <h2>Select Market</h2>
