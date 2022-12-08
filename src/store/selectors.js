@@ -6,6 +6,7 @@ import moment  from 'moment'
 
 
 const tokens = state => get(state, 'tokens.contracts')
+const account = state => get(state, 'provider.account')
 
 const allOrders = state => get(state, 'exchange.allOrders.data', [])
 const cancelledOrders = state=>get(state, 'exchange.cancelledOrders.data',[])
@@ -99,7 +100,6 @@ orders=orders.filter((o)=> o.tokenGive === tokens[0].address || o.tokenGive === 
    // Sort orders by date descending for display
  orders=orders.sort((a,b)=>b.timestamp - a.timestamp)
 
-console.log({orders})
 
 return orders
     }
@@ -140,9 +140,60 @@ const tokenPriceClass = (tokenPrice,orderId,previousOrder)=>{
   } else {
   	return RED
   }
-
 }
 
+//---------------------------------------
+//MY OPEN ORDERS
+export const myOpenOrdersSelector=createSelector(
+    account,
+    tokens,
+    openOrders,
+    (account, tokens, orders)=>{
+        if(!tokens[0] || !tokens[1] || !account ) {return}
+
+    // Filter orders created by current account
+    orders=orders.filter((o)=> o.user === account)
+
+    // Filter orders by selected tokens
+    orders=orders.filter((o)=> o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address)
+    orders=orders.filter((o)=> o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address)
+
+    // Decorate orders - add display attributes
+    orders=decorateMyOpenOrders(orders,tokens)
+  
+    // Sort orders by date descending
+    orders= orders.sort((a,b)=>b.timestamp - a.timestamp)
+
+    console.log(orders)
+    
+    return orders
+
+
+
+    }
+
+	)
+
+
+const decorateMyOpenOrders =(orders, tokens)=>{
+   return(
+      orders.map((order)=>{
+      	order=decorateOrder(order,tokens)
+      	order=decorateMyOpenOrder(order,tokens)
+      	return(order)
+      }
+   	))
+}
+
+const decorateMyOpenOrder = (order, tokens)=>{
+let orderType= order.tokenGive === tokens[1].address ? 'buy' : 'sell'
+
+return({
+...order,
+orderType,
+orderTypeClass: (orderType==='buy'? GREEN : RED)
+})
+}
 
 
 
@@ -152,7 +203,6 @@ const tokenPriceClass = (tokenPrice,orderId,previousOrder)=>{
 
 export const orderBookSelector = createSelector(openOrders, tokens, (orders, tokens)=>{
 
-console.log({tokens})
 
 if (!tokens[0] || !tokens[1]) {return}
 
@@ -160,7 +210,6 @@ if (!tokens[0] || !tokens[1]) {return}
 orders=orders.filter((o)=> o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address)
 orders=orders.filter((o)=> o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address)
 
-console.log({orders})
 // Decorate orders
 orders=decorateOrderBookOrders(orders,tokens)
 

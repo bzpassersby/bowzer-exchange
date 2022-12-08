@@ -18,7 +18,9 @@ import Balance from'./Balance'
 import Order from'./Order'
 import OrderBook from './OrderBook'
 import PriceChart from'./PriceChart'
+import Transactions from './Transactions'
 import Trades from './Trades'
+
 
 
 
@@ -85,7 +87,7 @@ useEffect(()=>{
 
           <PriceChart/>
 
-          {/* Transactions */}
+           <Transactions/>
 
            <Trades/>
 
