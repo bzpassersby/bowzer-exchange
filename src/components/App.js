@@ -17,6 +17,7 @@ import Markets from'./Markets'
 import Balance from'./Balance'
 import Order from'./Order'
 import OrderBook from './OrderBook'
+import PriceChart from'./PriceChart'
 
 
 
@@ -82,7 +83,7 @@ useEffect(()=>{
         </section>
         <section className='exchange__section--right grid'>
 
-          {/* PriceChart */}
+          <PriceChart/>
 
           {/* Transactions */}
 
