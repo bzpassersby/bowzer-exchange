@@ -7,6 +7,7 @@ import get from 'lodash'
 const OrderBook = () => {
 
 const symbols = useSelector(state=>state.tokens.symbols)
+
 const orderBook= useSelector(orderBookSelector)
 
   return (
@@ -16,7 +17,7 @@ const orderBook= useSelector(orderBookSelector)
       </div>
 
       <div className="flex">
-      
+
 
       {!orderBook || orderBook.sellOrders.length==0 ? (
           <p className='flex-center'>No Sell Orders</p>

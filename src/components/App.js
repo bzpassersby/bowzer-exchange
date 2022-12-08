@@ -18,6 +18,7 @@ import Balance from'./Balance'
 import Order from'./Order'
 import OrderBook from './OrderBook'
 import PriceChart from'./PriceChart'
+import Trades from './Trades'
 
 
 
@@ -69,7 +70,6 @@ useEffect(()=>{
 
   return (
     <div>
- 
       <Navbar/>
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
@@ -87,7 +87,7 @@ useEffect(()=>{
 
           {/* Transactions */}
 
-          {/* Trades */}
+           <Trades/>
 
            <OrderBook/>
 
