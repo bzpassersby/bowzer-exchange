@@ -42,13 +42,11 @@ function App() {
   window.ethereum.on('chainChanged',()=>{
     window.location.reload()
   })
-
   
   // Load Token Smart Contract
   const BOWZER=config[chainId].bowzer
   const mETH=config[chainId].mETH
   await loadTokens(provider, [BOWZER.address,mETH.address], dispatch)
-
 
   //Load Exchange Smart Contract
   const exchangeConfig=config[chainId].exchange

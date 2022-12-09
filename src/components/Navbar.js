@@ -13,13 +13,12 @@ const Navbar =()=>{
     const balance=useSelector(state=>state.provider.balance)
     const provider=useSelector(state=>state.provider.connection)
     const dispatch=useDispatch()
-    const n=5
+   
 
     const connectHandler= async()=>{
     	await loadAccount(provider, dispatch)
     }
 
-    console.log(n.toString(16))
 
     const networkHandler= async(e)=>{
         await window.ethereum.request({
@@ -42,6 +41,7 @@ const Navbar =()=>{
       <option value='0' disabled>Select Neworks</option>
       <option value='0x7A69'>Localhost</option>
       <option value='0x5'>Goerli</option>
+      <option value='0x13881'>Mumbai</option>
       </select> )}
    
 
