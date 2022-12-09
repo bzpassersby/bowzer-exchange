@@ -19,7 +19,7 @@ async function main() {
 
 
  // Deploy contract
- const bowzer=await Token.deploy('Bowzer Coin','BOWZER','1000000')
+ const bowzer=await Token.deploy('Bowzer Coin','BOZ','1000000')
  await bowzer.deployed()
  console.log(`BOWZER deployed to: ${bowzer.address}`)
 

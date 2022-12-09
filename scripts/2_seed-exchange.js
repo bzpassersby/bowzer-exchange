@@ -65,7 +65,7 @@ async function main () {
 
 	//Make orders
 	let orderId
-	transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(100),bowzer.address,tokens(5))
+	transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(5),bowzer.address,tokens(5))
 	result=await transaction.wait()
 	console.log(`Made order from ${user1.address}`)
 
@@ -83,7 +83,7 @@ async function main () {
    //Seed Filled Orders
 
    // User1 makes order
-   transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(100),bowzer.address,tokens(10))
+   transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(3),bowzer.address,tokens(10))
    result=await transaction.wait()
    console.log(`Made order from ${user1.address}`)
 
@@ -98,7 +98,7 @@ async function main () {
 
      
   //User1 makes another order
-   transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(60),bowzer.address,tokens(10))
+   transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(5),bowzer.address,tokens(10))
    result=await transaction.wait()
    console.log(`Made order from ${user1.address}`)
 
@@ -112,7 +112,7 @@ async function main () {
    await wait(1)
 
   //User1 makes final order
-   transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(200),bowzer.address,tokens(20))
+   transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(18),bowzer.address,tokens(20))
    result=await transaction.wait()
    console.log(`Made order from ${user1.address}`)
 
@@ -130,7 +130,7 @@ async function main () {
 
   //User1 makes 10 orders
   for(let i=1;i<=10; i++){
-  	transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(10*i),bowzer.address,tokens(10))
+  	transaction=await exchange.connect(user1).makeOrder(mETH.address,tokens(10),bowzer.address,tokens(10*i))
   	result=await transaction.wait()
 
   	console.log(`Made order from ${user1.address}`)
