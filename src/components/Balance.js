@@ -43,7 +43,6 @@ const amountHandler=(e,token)=>{
 	setToken1TransferAmount(e.target.value)
 	} else{
 		setToken2TransferAmount(e.target.value)
-		console.log({token2TransferAmount})
 	}
 }
 
@@ -81,9 +80,9 @@ const withdrawHandler=(e,token)=>{
 useEffect(()=>{
   if(exchange && tokens[0] && tokens[1] && account) {
   console.log('loading balance...')
-   const balance=loadBalances(exchange,tokens,account,dispatch)
+   loadBalances(exchange,tokens,account,dispatch)
  }
-}, [exchange,tokens,account,transferInProgress])
+}, [exchange,tokens,account,transferInProgress,dispatch])
 
 return (
     <div className='component exchange__transfers'>
@@ -134,7 +133,7 @@ return (
         </div>
 
         <form onSubmit={isDeposit ? (e)=>depositHandler(e,tokens[1]) : (e)=>withdrawHandler(e,tokens[1])}>
-          <label htmlFor="token1"></label>
+          <label htmlFor="token1">{symbols && symbols[1]} Amount</label>
           <input 
           type="text" 
           id='token1' 

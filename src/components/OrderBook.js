@@ -1,7 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux'
 import sort from '../assets/sort.svg'
 import {orderBookSelector} from '../store/selectors'
-import get from 'lodash'
 import {fillOrder } from '../store/interactions'
 
 
@@ -27,7 +26,7 @@ const fillOrderHandler=(order)=>{
       <div className="flex">
 
 
-      {!orderBook || orderBook.sellOrders.length==0 ? (
+      {!orderBook || orderBook.sellOrders.length===0 ? (
           <p className='flex-center'>No Sell Orders</p>
         ) : (
 
@@ -56,7 +55,7 @@ const fillOrderHandler=(order)=>{
         )}
 
         <div className='divider'></div>
-{!orderBook || orderBook.buyOrders.length==0 ? (
+{!orderBook || orderBook.buyOrders.length===0 ? (
         <p className='flex-center'>No Buy Orders</p>
   ) : (
         <table className='exchange__orderbook--buy'>

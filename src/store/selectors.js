@@ -12,6 +12,8 @@ const allOrders = state => get(state, 'exchange.allOrders.data', [])
 const cancelledOrders = state=>get(state, 'exchange.cancelledOrders.data',[])
 const filledOrders= state=>get(state, 'exchange.filledOrders.data', [])
 
+const events=state=> get(state,'exchange.events',[])
+
 const openOrders = state => {
 	const all=allOrders(state)
 	const filled=filledOrders(state)
@@ -141,6 +143,21 @@ const tokenPriceClass = (tokenPrice,orderId,previousOrder)=>{
   	return RED
   }
 }
+//---------------------------------------
+// MY EVENTS
+
+export const myEventSelector =createSelector(
+     account,
+     events,
+     (account,events)=>{
+      events=events.filter((e)=>e.args.user===account)
+      console.log(events)
+      return events
+
+     }
+	)
+
+
 
 //---------------------------------------
 //MY OPEN ORDERS
