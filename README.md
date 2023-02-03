@@ -26,12 +26,12 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Bowser Exchange</h3>
+<h3 align="center">Bowzer Exchange</h3>
 
   <p align="center">
     This is a web token exchange platform that enables token withdraw/deposit, placing exchange order,fulfill exchange orders,
     as well as viewing order historty and real time price charts. The token and exchange contracts were deployed to Goerli testnet
-    and mumbai testnet. Currently supported tokens are Bowser Token (ERC20 on testnets) and ETH. 
+    and mumbai testnet. Currently supported tokens are Boz(ERC20), mock ETH and mock Dai. 
     <br />
     <a href="https://calm-pond-2622.on.fleek.co/">View Demo</a>
     ·
