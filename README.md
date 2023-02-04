@@ -33,7 +33,7 @@
     as well as viewing order historty and real time price charts. The token and exchange contracts were deployed to Goerli testnet
     and mumbai testnet. Currently supported tokens are Boz(ERC20), mock ETH and mock Dai. 
     <br />
-    <a href="https://calm-pond-2622.on.fleek.co/">View Demo</a>
+    <a href="https://calm-pond-2622.on.fleek.co/" target="_blank">View Demo</a>
     ·
     <a href="https://github.com/bzpassersby/bowzer-exchange/issues">Report Bug</a>
     ·
